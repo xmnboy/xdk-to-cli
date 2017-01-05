@@ -58,7 +58,6 @@ var rl = readline.createInterface({
  */
 
 var onLine = function(lineIn) {
-
     var self = onLine ;                         // to manage static local variables
     self.lineArray = self.lineArray || [] ;     // to manage the incoming XML file
 
@@ -68,7 +67,6 @@ rl.on('line', onLine) ;
 
 
 var onClose = function() {
-
     var self = onClose ;                        // to manage static local variables
     var i, x, y, z ;                            // temp vars
 
@@ -96,7 +94,7 @@ var onClose = function() {
 
 // Second pass marks comments in the array, so we can ignore in future passes.
 
-    // create a new array to hold our comment markers
+    // create a new two-dimensional array to hold our comment markers
 
     for( i = 0 ; i < self.pass1Array.length ; i++ ) {
         (function() {                           // jshint ignore:line
@@ -107,13 +105,27 @@ var onClose = function() {
         }()) ;
     }
 
+
+    // add a comment that indicates the resulting config file was written
+    // by this script and the date and time at which it was written
+    // written as a comment directly under the <widget> tag
+
+    self.pass2Array.forEach(function(line, index, array) {
+        if( /<widget.*>/.test(line) ) {
+            var d = new Date() ;
+            var x = ['C', "<!-- This config.xml file created by " + __filename + " at " + d.toLocaleString() + " -->"] ;
+            array.splice(index+1, 0, x) ;
+        }
+    }) ;
+
+
     // find single-line comments and mark them
     // remember that we can assume only one tag per line now
 
     self.pass2Array.forEach(function(line) {
         var x = line[1].search(/<\!\-\-.*\-\->/) ;
-        if( x !== -1 ) {                    // if we found a comment on one line
-            line[0] = 'C' ;   // mark it as a comment line
+        if( x !== -1 ) {                        // if we found a comment on one line
+            line[0] = 'C' ;                     // mark it as a comment line
         }
     }) ;
 
@@ -204,7 +216,6 @@ rl.on('close', onClose) ;
  */
 
 var tagConvert = function(line) {
-
     var x, y, z ;                               // temp vars
     var self = tagConvert ;                     // to manage static local variables
 
@@ -373,7 +384,6 @@ function splitMultipleTagLines(array) {
  */
 
 function versionNodeCheck(minNodeVersion) {
-
     var ver = {} ;                  // reference to the version compare helper module
 
     if (typeof minNodeVersion != "string") {
@@ -413,7 +423,6 @@ function versionNodeCheck(minNodeVersion) {
  */
 
 function getModule(moduleName) {
-
     try {
         require.resolve(moduleName) ;
     }
