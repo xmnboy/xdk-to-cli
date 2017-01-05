@@ -85,7 +85,7 @@ Running the Script
 For example, on Windows:
 
 ~~~
-\> C:\master\script\path\xdk-to-cli.bat
+> master\script\path\xdk-to-cli.bat
 SUCCESS: config.android.xml file created from intelxdk.config.android.xml file
 SUCCESS: config.ios.xml file created from intelxdk.config.ios.xml file
 SUCCESS: config.windows.xml file created from intelxdk.config.windows.xml file
@@ -94,7 +94,7 @@ SUCCESS: config.windows.xml file created from intelxdk.config.windows.xml file
 And on OSX or Linux:
 
 ~~~
-$ /master/script/path/xdk-to-cli.sh
+$ master/script/path/xdk-to-cli.sh
 SUCCESS: config.android.xml file created from intelxdk.config.android.xml file
 SUCCESS: config.ios.xml file created from intelxdk.config.ios.xml file
 SUCCESS: config.windows.xml file created from intelxdk.config.windows.xml file
