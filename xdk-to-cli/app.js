@@ -278,7 +278,7 @@ var tagConvert = function(line) {
 
             // iOS only, add 'platform="ios"' to <preference name="deployment-target" value="#.#"/> tag
             case /<preference\s+name=\"deployment-target\".*>/.test(line):
-                line = line.replace(/name=\"deployment-target\"/, 'platform="ios"') ;
+                line = line.replace(/name=\"deployment-target\"/, 'platform="ios" $&') ;
                 break ;
 
             // Windows only, change <preference name="windows-publisher-display-name"> tag
