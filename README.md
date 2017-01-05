@@ -111,8 +111,8 @@ PhoneGap Build or Cordova CLI.
   you need to use with Adobe PhoneGap Build or Cordova CLI. Likewise, you can
   do the same for the other targets (iOS and Windows).
 
-The `config.windows.xml` file is based on the `intelxdk.config.windows.xml`
-file, which is based on your Intel XDK Windows 10 UAP project settings.
+  The `config.windows.xml` file is based on the `intelxdk.config.windows.xml`
+  file, which is based on your Intel XDK Windows 10 UAP project settings.
 
 * To build your app with Adobe PhoneGap Build, create a single `config.xml`
   file (using one of the techniques described above) and place it into the root
