@@ -227,7 +227,7 @@ var tagConvert = function(line) {
                 break ;
 
             // convert the XDK cli spec into a PhoneGap compatible CLI version spec
-            case /<intelxdk:cordova-cli.*\/>/.test(line):
+            case /<intelxdk:cordova-cli.*>/.test(line):
                 if( line.search(/version=\"6\.2\.0\"/) != -1 )
                     line = '<preference name="phonegap-version" value="cli-6.2.0" />' + "<!-- " + line + " -->" ;
                 else if( line.search(/version=\"5\.4\.1\"/) != -1 )
@@ -252,7 +252,7 @@ var tagConvert = function(line) {
                 break ;
 
             // Android only, convert Crosswalk version specifier
-            case /<intelxdk:crosswalk\s+version.*\/>/.test(line):
+            case /<intelxdk:crosswalk\s+version.*>/.test(line):
                 x = line.match(/version=\"([0-9]+|shared)\"/)[1] ;
                 if( x === "shared") {
                     line = '<preference name="xwalkMode" value="shared" /> ' ;
@@ -277,17 +277,17 @@ var tagConvert = function(line) {
                 break ;
 
             // iOS only, add 'platform="ios"' to <preference name="deployment-target" value="#.#"/> tag
-            case /<preference\s+name=\"deployment-target\".*\/>/.test(line):
-                line = line.replace(/name=\"deployment-target\"/, 'platform="ios" $&') ;
+            case /<preference\s+name=\"deployment-target\".*>/.test(line):
+                line = line.replace(/name=\"deployment-target\"/, 'platform="ios"') ;
                 break ;
 
             // Windows only, change <preference name="windows-publisher-display-name"> tag
-            case /<preference\s+name=\"windows-publisher-display-name\".*\/>/.test(line):
+            case /<preference\s+name=\"windows-publisher-display-name\".*>/.test(line):
                 line = line.replace("windows-publisher-display-name", "WindowsStorePublisherName") ;
                 break ;
 
             // Windows only, change <preference name="windows-capabilities"> tag
-            case /<preference\s+name=\"windows-capabilities\".*\/>/.test(line):
+            case /<preference\s+name=\"windows-capabilities\".*>/.test(line):
                 line = "<!-- ERROR: unable to convert: " + line + " -->" ;
                 break ;
 
