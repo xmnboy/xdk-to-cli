@@ -300,12 +300,13 @@ var tagConvert = function(line) {
             case /<intelxdk:crosswalk\s+version.*>/.test(line):
                 x = line.match(/version=\"([0-9]+|shared)\"/)[1] ;
                 if( x === "shared") {
-                    line = '<preference name="xwalkMode" value="shared" /> ' ;
+                    line = "<!-- " + line + " --> " ;
+                    line += '<preference name="xwalkMode" value="shared" /> ' ;
                     line += '<plugin name="crosswalk-pluggable-webview-plugin" spec="1.8.0" />' ;
                 }
                 else {
                     x = parseInt(x) ;
-                    line = '<preference name="xwalkMultipleApk" value="false" /> ' ;
+                    line = "<!-- " + line + " --> " + '<preference name="xwalkMultipleApk" value="false" /> ' ;
                     if( x >= 20 )
                         line += '<plugin name="crosswalk-pluggable-webview-plugin" />' ;
                     else if( x == 19 )
@@ -319,6 +320,13 @@ var tagConvert = function(line) {
                     else
                         line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.4.0" />' ;
                 }
+                break ;
+
+            // Android only, remove xwalkVersion spec (used by Crosswalk plugin)
+            // because it causes problems with Adobe PhoneGap Build
+            // might be included in the intelxdk.config.additions.xml file
+            case /<preference\sname=\"xwalkVersion\".*>/.test(line):
+                line = "<!-- " + line + " --> " + "<!-- Does not work with Adobe PhoneGap Build -->" ;
                 break ;
 
             // iOS only, add 'platform="ios"' to <preference name="deployment-target" value="#.#"/> tag
