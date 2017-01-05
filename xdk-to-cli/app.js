@@ -190,7 +190,41 @@ var onClose = function() {
 // originate from a git repo will be properly identified in the final
 // config.xml file.
 
+    // TODO: get the "string" from the <name>string</name> tag in the intelxdk.config.android.xml file.
+    // TODO: assemble the name of the <project-name>.xdk file (i.e., "string.xdk")
+    // TODO: read in the <project-name>.xdk JSON object
+    // TODO: find all the non-NPM plugin references and update them in our config.xml array
 
+    /*
+     * Use the following set of rules to transform the non-NPM <plugin> specs:
+     *
+     * Inspect the <project-name>.xdk file and identify all of the plugins listed
+     * in the "cordovaPlugins": [] array that include the property
+     * "originType": "local" or "originType": "repo".
+     *
+     * For those plugins that contain the "originType": "local" property we need to
+     * issue a warning that this plugin (use the "id", "name" and "version" properties
+     * to identify it) was added as a local plugin and, therefore, may be different than
+     * that which is added by PhoneGap Build, or may be a plugin that PhoneGap Build
+     * cannot find. If this is a private plugin PhoneGap Build may not be able to locate it.
+     * If this was a modification of an existing plugin, PhoneGap Build will not see the
+     * modifications to the plugin. It might be helpful to also include a similar comment
+     * directly above the corresponding <plugin name="my-plugin-name" spec="1.2.3" />
+     * entry in the config.xml file being generated.
+     *
+     * For those plugins that contain the "originType": "repo" property we need to change
+     * the corresponding <plugin name="my-plugin-name" spec="1.2.3" /> entry in the
+     * config.xml file so it is in git format; which means the "spec" field needs to be
+     * changed by replacing the string ("1.2.3" in this example) to be the concatenation
+     * of the "origin" and "gitref" properties, separated by a # character. For example,
+     * go from this:
+     *
+     * <plugin name="my-plugin-name" spec="1.2.3" />
+     *
+     * to this
+     *
+     * <plugin name="my-plugin-name" spec="https://github.com/apache/my-cordova-plugin-repo#v3.2.1" />
+     */
 
 
 // Finally! We can send the result to stdout!!
