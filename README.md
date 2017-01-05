@@ -100,19 +100,19 @@ SUCCESS: config.ios.xml file created from intelxdk.config.ios.xml file
 SUCCESS: config.windows.xml file created from intelxdk.config.windows.xml file
 ~~~
 
-* As shown above, three `config.*.xml` files are created, in your local Intel
-  XDK project folder. Each is based on the corresponding `intelxdk.config.*.xml`
-  file. If you compare the three they will be nearly identical and can be
-  merged, by hand, into a single `config.xml` file for use with either Adobe
-  PhoneGap Build or Cordova CLI.
+As shown above, three `config.*.xml` files are created, in your local Intel
+XDK project folder. Each is based on the corresponding `intelxdk.config.*.xml`
+file. If you compare the three they will be nearly identical and can be
+merged, by hand, into a single `config.xml` file for use with either Adobe
+PhoneGap Build or Cordova CLI.
 
 * If you are only building for a single target (e.g., Android) you can simply
   rename the `config.android.xml` file to `config.xml` and you will have what
   you need to use with Adobe PhoneGap Build or Cordova CLI. Likewise, you can
   do the same for the other targets (iOS and Windows).
 
-* The `config.windows.xml` file is based on the `intelxdk.config.windows.xml`
-  file, which is based on your Intel XDK Windows 10 UAP project settings.
+The `config.windows.xml` file is based on the `intelxdk.config.windows.xml`
+file, which is based on your Intel XDK Windows 10 UAP project settings.
 
 * To build your app with Adobe PhoneGap Build, create a single `config.xml`
   file (using one of the techniques described above) and place it into the root
