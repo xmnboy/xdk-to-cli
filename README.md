@@ -11,8 +11,8 @@ are automatically created by the [Intel® XDK](http://xdk.intel.com)
 into `config.xml` files that can be used to build your Intel XDK
 project using either Cordova\* CLI or Adobe\* PhoneGap\* Build.
 
-> If you have bug fixes for this script, please send a pull request
-> with your recommended fix.
+_If you have bug fixes for this script, please send a pull request
+with your recommended fix._
 
 > It is *very important* that the top-level `xdk-to-cli.sh` and
 > `xdk-to-cli.bat` master script files be located *alongside* the
@@ -121,6 +121,13 @@ PhoneGap Build or Cordova CLI.
 
 * Instructions for using these `config.*.xml` files with Cordova CLI will be
   provided in an update.
+
+> As an aside, you can run the Node.js script files directly; it is not a
+> hard requirement that you use the master `bash` and `cmd.exe` scripts to
+> generate a `config.xml` for use with Adobe PhoneGap Build and Cordova CLI.
+> Take a look at the master scripts to see how that is done. You will see that
+> the Node.js script assumes the use of `stdin` and `stdout` to manage the
+> files to be read and written (look for the `<` and `>` file redirections).
 
 
 Script Limitations
