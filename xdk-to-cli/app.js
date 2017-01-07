@@ -302,23 +302,23 @@ var tagConvert = function(line) {
                 if( x === "shared") {
                     line = "<!-- " + line + " --> " ;
                     line += '<preference name="xwalkMode" value="shared" /> ' ;
-                    line += '<plugin name="crosswalk-pluggable-webview-plugin" spec="1.8.0" />' ;
+                    line += '<plugin name="cordova-plugin-crosswalk-webview" spec="1.8.0" />' ;
                 }
                 else {
                     x = parseInt(x) ;
                     line = "<!-- " + line + " --> " + '<preference name="xwalkMultipleApk" value="false" /> ' ;
                     if( x >= 20 )
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" />' ;
                     else if( x == 19 )
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.8.0" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.8.0" />' ;
                     else if( x == 18 )
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.7.2" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.7.2" />' ;
                     else if( x == 17 )
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.6.1" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.6.1" />' ;
                     else if( x == 16 )
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.5.0" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.5.0" />' ;
                     else
-                        line += '<plugin name="crosswalk-pluggable-webview-plugin" version="1.4.0" />' ;
+                        line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.4.0" />' ;
                 }
                 break ;
 
