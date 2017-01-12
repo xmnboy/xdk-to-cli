@@ -68,7 +68,9 @@ rl.on('line', onLine) ;
 
 var onClose = function() {
     var self = onClose ;                        // to manage static local variables
-    var i, x, y, z ;                            // temp vars
+    var i, j, k, x, y, z, fs ;                  // various temp vars
+    var nameTag = null ;                        // for deducing which config file we are parsing
+    var projectJson = {} ;                      // to hold contents of the <project>.xdk file
 
     self.parseTag = "widget" ;                  // default parse is the <widget> tag
     self.orgArray = onLine.lineArray ;          // get pointer to file we read in
@@ -145,14 +147,24 @@ var onClose = function() {
 
 
 // Third pass translates XDK-specific tags into corresponding PhoneGap/Cordova tags.
+// And find the <name> tag so we can use it later to parse the <project-name>.xdk file.
 
     for( i = 0 ; i < self.pass2Array.length ; i++ ) {
         self.pass3Array[i] = ["",""] ;
         self.pass3Array[i][0] = self.pass2Array[i][0] ;
-        if( self.pass2Array[i][0] === 'C' )
+        if( self.pass2Array[i][0] === 'C' ) {
             self.pass3Array[i][1] = self.pass2Array[i][1] ;
-        else
+        }
+        else {
             self.pass3Array[i][1] = tagConvert(self.pass2Array[i][1]) ;
+
+            if( !nameTag ) {
+                nameTag = self.pass2Array[i][1].match(/<name>(.*)<\/name>/) ;
+                if( nameTag ) {
+                    nameTag = nameTag[1] ;      // get "string" from the <name>string</name> tag
+                }
+            }
+        }
     }
 
 
@@ -190,41 +202,90 @@ var onClose = function() {
 // originate from a git repo will be properly identified in the final
 // config.xml file.
 
-    // TODO: get the "string" from the <name>string</name> tag in the intelxdk.config.android.xml file.
-    // TODO: assemble the name of the <project-name>.xdk file (i.e., "string.xdk")
-    // TODO: read in the <project-name>.xdk JSON object
-    // TODO: find all the non-NPM plugin references and update them in our config.xml array
+    // assemble the name of the <project-name>.xdk file (i.e., "string.xdk")
+    // based on the <name> tag that we found during a previous pass (above)
+    if( nameTag )
+        nameTag += ".xdk" ;
 
+    // read in the <project-name>.xdk JSON object
+    if( nameTag ) {
+        fs = require('fs') ;
+        projectJson = JSON.parse(fs.readFileSync(nameTag, "utf8")) ;
+    }
+
+    // find all non-NPM plugin references and update them in our config.xml array
     /*
-     * Use the following set of rules to transform the non-NPM <plugin> specs:
+     * Use the following rules to transform non-NPM <plugin> specs:
      *
-     * Inspect the <project-name>.xdk file and identify all of the plugins listed
-     * in the "cordovaPlugins": [] array that include the property
-     * "originType": "local" or "originType": "repo".
+     * Inspect the <project-name>.xdk file and identify all plugins found
+     * in the "cordovaPlugins": [] array that have either of these properties:
      *
-     * For those plugins that contain the "originType": "local" property we need to
-     * issue a warning that this plugin (use the "id", "name" and "version" properties
-     * to identify it) was added as a local plugin and, therefore, may be different than
-     * that which is added by PhoneGap Build, or may be a plugin that PhoneGap Build
-     * cannot find. If this is a private plugin PhoneGap Build may not be able to locate it.
-     * If this was a modification of an existing plugin, PhoneGap Build will not see the
-     * modifications to the plugin. It might be helpful to also include a similar comment
-     * directly above the corresponding <plugin name="my-plugin-name" spec="1.2.3" />
-     * entry in the config.xml file being generated.
+     * "originType": "local"
+     * "originType": "repo".
      *
-     * For those plugins that contain the "originType": "repo" property we need to change
-     * the corresponding <plugin name="my-plugin-name" spec="1.2.3" /> entry in the
-     * config.xml file so it is in git format; which means the "spec" field needs to be
-     * changed by replacing the string ("1.2.3" in this example) to be the concatenation
-     * of the "origin" and "gitref" properties, separated by a # character. For example,
-     * go from this:
+     * For "originType": "local":
+     * - issue a warning that this plugin was added as a local plugin
+     * - use "id", "name" and "version" properties to identify it
+     * - may not work with PhoneGap Build, which may not be able to locate it
+     * - if modification of public plugin, PGB will not see the modifications
      *
+     * For "originType": "repo":
+     * - convert to git format; "spec" field needs to replaced with git reference
+     * - replace "spec" string with concatenation of "origin" and "gitref" properties
+     * - separate "orgin" and "gitref" with # character.
+     * - for example, from this:
      * <plugin name="my-plugin-name" spec="1.2.3" />
-     *
-     * to this
-     *
+     * - to this:
      * <plugin name="my-plugin-name" spec="https://github.com/apache/my-cordova-plugin-repo#v3.2.1" />
-     */
+    */
+    y = [] ;
+    if( projectJson && projectJson.project && projectJson.project.cordovaPlugins ) {
+        for( x in projectJson.project.cordovaPlugins ) {
+            y.push(projectJson.project.cordovaPlugins[x]) ;             // make copy of the plugins array
+        }
+        for( z in y ) {
+            if( y[z].originType && (y[z].originType === "local") ) {    // plugin was a "local import"
+                i = "WARNING: regarding plugin '" + y[z].id + "' (" + y[z].name + "):" ;
+                j = "  Plugin was imported locally and may not work with Adobe PhoneGap Build." ;
+                k = "  Locally imported plugins may not work if the plugin is private or modified." ;
+                console.error(i) ;
+                console.error(j) ;
+                console.error(k) ;
+
+                // find the plugin in the pass3Array and add warning above as a comment
+                j = new RegExp('<plugin\\sname="' + y[z].id + '"') ;
+                for( i = 0 ; i < self.pass3Array.length ; i++ ) {
+                    if( self.pass3Array[i][0] !== 'C' ) {
+                        if( self.pass3Array[i][1].match(j) ) {
+                            self.pass3Array[i][1] += "<!-- " + k + " -->" ;
+                        }
+                    }
+                }
+            }
+            if( y[z].originType && (y[z].originType === "repo") ) {     // plugin is from a "git repo"
+                i = "NOTE: regarding plugin '" + y[z].id + "' (" + y[z].name + "):" ;
+                j = "  Plugin was added via a git repo, not the Cordova NPM plugin registry." ;
+                k = "  If available via Cordova registry; consider changing to an NPM reference." ;
+                console.error(i) ;
+                console.error(j) ;
+                console.error(k) ;
+
+                // find the plugin in the pass3Array and replace "spec" with origin or origin#gitref
+                j = new RegExp('<plugin\\sname="' + y[z].id + '"') ;
+                for( i = 0 ; i < self.pass3Array.length ; i++ ) {
+                    if( self.pass3Array[i][0] !== 'C' ) {
+                        if( self.pass3Array[i][1].match(j) ) {
+                            if( y[z].gitref )
+                                self.pass3Array[i][1] = self.pass3Array[i][1].replace(/spec=\"([^\"]+)\"/, "spec=\"" + y[z].origin + "#" + y[z].gitref + "\"") ;
+                            else
+                                self.pass3Array[i][1] = self.pass3Array[i][1].replace(/spec=\"([^\"]+)\"/, "spec=\"" + y[z].origin + "\"") ;
+                            self.pass3Array[i][1] += "<!-- " + k + " -->" ;
+                        }
+                    }
+                }
+            }
+        }
+    }
 
 
 // Finally! We can send the result to stdout!!
@@ -469,7 +530,7 @@ function getModule(moduleName) {
         require.resolve(moduleName) ;
     }
     catch(e) {
-        console.error("Missing local node module: " + moduleName) ;
+        console.error("Missing local node module or file: " + moduleName) ;
 //        console.error(e) ;
         return undefined ;
     }
