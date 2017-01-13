@@ -2,6 +2,9 @@
 : Assumes the xdk-to-cli app.js file is installed in a folder
 : named xdk-to-cli within the directory containing this batch file.
 
+: Copyright (c) 2017, Paul Fischer, Intel Corporation
+: See LICENSE.md for license terms and conditions.
+
 : Also assumes that your cwd is the XDK project folder that
 : contains the intelxdk.config.{android|ios|windows}.xml files
 : to be converted into config.{android|ios|windows}.xml files.
