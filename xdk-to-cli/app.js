@@ -40,7 +40,7 @@ var rl = readline.createInterface({
  * only a single XML tag. This could then be rewritten as the second-pass operation.
  *
  * @function
- * @param {String} linIn - one line of input from the file being converted
+ * @param {String} lineIn - one line of input from the file being converted
  * @return {null} - no useful return value
  * @author Paul Fischer, Intel Corporation
  */
