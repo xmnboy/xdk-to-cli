@@ -57,7 +57,7 @@ rl.on('line', onLine) ;
 var onClose = function() {
     var self = onClose ;                        // to manage static local variables
     var i, j, k, x, y, z, fs ;                  // various temp vars
-    var nameTag = null ;                        // for deducing which config file we are parsing
+    var projectName = null ;                    // for deducing which config file we are parsing
     var projectJson = {} ;                      // to hold contents of the <project>.xdk file
 
     self.parseTag = "widget" ;                  // default parse level is the <widget> tag
@@ -135,7 +135,6 @@ var onClose = function() {
 
 
 // Third pass translates XDK-specific tags into corresponding PhoneGap/Cordova tags.
-// And find the <name> tag so we can use it later to parse the <project-name>.xdk file.
 
     for( i = 0 ; i < self.pass2Array.length ; i++ ) {
         self.pass3Array[i] = ["",""] ;
@@ -145,13 +144,6 @@ var onClose = function() {
         }
         else {
             self.pass3Array[i][1] = tagConvert(self.pass2Array[i][1]) ;
-
-            if( !nameTag ) {
-                nameTag = self.pass2Array[i][1].match(/<name>(.*)<\/name>/) ;
-                if( nameTag ) {
-                    nameTag = nameTag[1] ;      // get "string" from the <name>string</name> tag
-                }
-            }
         }
     }
 
@@ -190,21 +182,25 @@ var onClose = function() {
 // originate from a git repo will be properly identified in the final
 // config.xml file.
 
-    // assemble the name of the <project-name>.xdk file (i.e., "string.xdk")
-    // based on the <name> tag that we found during a previous pass (above)
-    if( nameTag )
-        nameTag += ".xdk" ;
+    // get name of the <project-name>.xdk file from process.argv[2]
+    if( typeof process.argv[2] !== "undefined" )
+        projectName = process.argv[2] ;
 
     // read in the <project-name>.xdk JSON object
-    if( nameTag ) {
+    if( projectName !== null ) {
         fs = require('fs') ;
         try {
-            projectJson = JSON.parse(fs.readFileSync(nameTag, "utf8")) ;
+            projectJson = JSON.parse(fs.readFileSync(projectName, "utf8")) ;
         } catch(err) {
-            console.error("ERROR: readFileSync had trouble reading: " + nameTag + "; perhaps an invalid <name> tag?") ;
+            console.error("ERROR: readFileSync had trouble reading: " + projectName + "; perhaps an invalid filename?") ;
             console.error("  readFileSync error message: " + err.message) ;
+            console.error("WARNING: incomplete <plugin> tag conversion results.") ;
             projectJson = {} ;
         }
+    }
+    else {
+            console.error("ERROR: no <project-name>.xdk filename provided.") ;
+            console.error("WARNING: incomplete <plugin> tag conversion results.") ;
     }
 
     // find all non-NPM plugin references and update them in our config.xml array
