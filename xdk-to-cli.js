@@ -22,6 +22,7 @@
 
 
 
+var path = require("path") ;
 var minNode = "4.0" ;           // min required Node.js version (must be a string!)
 versionNodeCheck(minNode) ;     // checks Node.js version
 if( process.exitCode )          // exit if we have a non-zero exitCode lying around
@@ -117,7 +118,7 @@ function onFileClose() {
     self.pass2Array.forEach(function(line, index, array) {
         if( /<widget.*>/.test(line) ) {
             var d = new Date() ;
-            var x = ['C', "<!-- This config.xml file created by " + __filename + " at " + d.toLocaleString() + " -->"] ;
+            var x = ['C', "<!-- This config.xml file created by " + path.basename(__filename) + " at " + d.toLocaleString() + " -->"] ;
             array.splice(index+1, 0, x) ;
         }
     }) ;
@@ -521,7 +522,7 @@ function versionNodeCheck(minNodeVersion) {
 
     // Confirm we have correct version of Node.js for running this script.
 
-    var ver = getModule("version-compare") ;
+    var ver = getModule(path.join(__dirname, "./version-compare.js")) ;
     if( typeof ver === "undefined" ) {
         return ++exitCode ;
     }

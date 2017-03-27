@@ -1,7 +1,7 @@
 {
   "name": "xdk-to-cli",
   "description": "Convert intelxdk.config.*.xml files to proper config.xml files.",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "keywords": ["PhoneGap","Cordova","XDK","config.xml"],
   "author": {"name": "Paul Fischer"},
   "repository": {
@@ -11,7 +11,7 @@
   "files": [
     "index.js",
     "xdk-to-cli.js",
-    "lib"
+    "version-compare.js"
   ],
   "license": "BSD-3-Clause",
   "engines": {
