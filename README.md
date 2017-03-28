@@ -64,19 +64,20 @@ Installing the Script
 [Download and install Node.js 4.0][2], or greater, onto your development
 system, if you do not already have at least that version installed.
 
-Install the script directly from the NPM public registry by typing:
+Install the script directly from the NPM public registry by typing the
+following at the command-line:
 
 * `npm -g install xdk-to-cli`
 
-Or, install it from a local folder on your dev system:
+Or, install the script from a copy in a local folder on your dev system:
 
 * [`git clone`][3] or [download a ZIP file][4] of this repo onto your
-  development system (unzip the ZIP file if you chose to "download a ZIP").
+  development system (extract the ZIP file if you chose to "download a ZIP").
 
-* Goto the folder containing the downloaded copy of this script (the folder
-  that contains the `package.json` file).
+* Goto the folder containing the downloaded copy of this script (`cd` to the
+  folder that contains the `package.json` file).
 
-* From that folder, type `npm -g install` to install the script.
+* From that folder, at the command-line, type: `npm -g install`
 
 
 Running the Script
@@ -85,12 +86,15 @@ Running the Script
 * Open the Intel XDK to your "project of interest."
 
 * Using the Test tab in your open project, push the green "PUSH FILES" button.
+
   _This insures that the project files to be read by this script are accurate
   and up-to-date. This "refresh" should be done whenever you have changed any
   project settings or added/removed any Cordova plugins to your project._
 
 * Identify the `<project-name>.xdk` file in the root folder of your project of
-  interest. _You can quickly locate the root folder of your project by opening
+  interest.
+
+  _You can quickly locate the root folder of your project by opening
   the Develop tab, right-clicking one of the `intelxdk.config.*.xml` files
   and selecting "Show in Finder" or "Show in Explorer" from the right-click
   menu._
@@ -100,9 +104,9 @@ Running the Script
   other informational messages are printed to the console (via stderr).
 
 * If there are no errors, warnings or other messages you should see up to three
-  "SUCCESS" messages at the command-line. You may also see warnings and notes
-  with those "SUCCESS" messages; it is important that you _read all of the
-  messages!_
+  status messages and a "SUCCESS" message. You may also see warnings and notes
+  with those status messages; it is very important that you
+  _read all warnings and notes!_
 
 For example:
 ~~~
@@ -113,23 +117,23 @@ Creating config.windows.xml
 SUCCESS: finished!
 ~~~
 
-As shown above, three `config.*.xml` files are created, in your local Intel
-XDK project folder. Each is based on the corresponding `intelxdk.config.*.xml`
-file and the contents of the `<project-name>.xdk` file you specified. If you
-compare the three `config.*.xml` files they will be nearly identical and can
-be easily merged into a single `config.xml` file for use with either Adobe
-PhoneGap Build or Cordova CLI.
+As shown above, three `config.*.xml` files are created in your local Intel XDK
+project folder. Each is based on the corresponding `intelxdk.config.*.xml`
+file and the `<project-name>.xdk` file you specified. If you compare the three
+`config.*.xml` files they will be nearly identical, and can be merged into a
+single `config.xml` file for use with Adobe PhoneGap Build or Cordova CLI.
 
 * If you are building for only a single target (e.g., Android) you can simply
   rename the `config.android.xml` file to `config.xml` and you will have what
   you need to use with Adobe PhoneGap Build or Cordova CLI.
 
-  NOTE: The `config.windows.xml` file is based on the `intelxdk.config.windows.xml`
-  file, which is derived from your Intel XDK Windows 10 UAP project settings.
-  There is no conversion of the older Windows config files by this script.
+  *NOTE:* The `config.windows.xml` file is based on the
+  `intelxdk.config.windows.xml` file, which is derived from your Intel XDK
+  Windows 10 UAP project settings. There is no conversion of the older Windows
+  config files by this script.
 
-* If you are building for multiple targets you should combine the relevant
-  `config.*.xml` files into a single `config.xml` file. This step is not done
+* If you are building for multiple targets you can combine the relevant
+  `config.*.xml` files into a single `config.xml` file. This step is *not* done
   automatically by the script and must be done manually using a code editor
   or any one of many [diff and merge utilities][8] available for this purpose.
 
@@ -142,8 +146,10 @@ Then ZIP your project folder and submit the ZIP file to Adobe PhoneGap Build.
 > it exists, the `platforms` folders from the ZIP file. PhoneGap Build does not
 > need these folders to perform a build.
 
-_Instructions for using these `config.*.xml` files to build your app with Cordova
-CLI will be provided in an update to this README file._
+_Instructions for using these `config.*.xml` files to build your app with
+Cordova CLI will be provided in an update to this README file._ In the
+meantime, this [Intel XDK doc page][9] should help (start from the section
+titled _Transferring Signing Certificates to PhoneGap Build_).
 
 Script Limitations
 ------------------
@@ -172,5 +178,6 @@ Script Limitations
 [6]: https://github.com/xmnboy/xdk-to-cli/issues
 [7]: http://www.urbandictionary.com/define.php?term=smoke%20test
 [8]: https://www.google.com/webhp?sourceid=chrome-instant&ion=1&espv=2&ie=UTF-8#q=diff%20and%20merge%20tools
+[9]: https://software.intel.com/en-us/xdk/docs/build-xdk-app-with-phonegap-cordova-cli
 
 _\*Other names and brands may be claimed as the property of others._
