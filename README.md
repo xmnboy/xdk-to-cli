@@ -61,14 +61,14 @@ Script Requirements
 Installing the Script
 ---------------------
 
-* [Download and install Node.js 4.0][2], or greater, onto your development
-  system, if you do not already have at least that version installed.
+[Download and install Node.js 4.0][2], or greater, onto your development
+system, if you do not already have at least that version installed.
 
-Install this script directly from the NPM public registry using:
+Install the script directly from the NPM public registry by typing:
 
-* `npm -g install xdk-to-cli` at the command-line
+* `npm -g install xdk-to-cli`
 
-Or, install it by downloading and installing from a local folder:
+Or, install it from a local folder on your dev system:
 
 * [`git clone`][3] or [download a ZIP file][4] of this repo onto your
   development system (unzip the ZIP file if you chose to "download a ZIP").
