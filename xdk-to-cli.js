@@ -360,7 +360,9 @@ function tagConvert(line) {
 
             // convert the XDK cli spec into a PhoneGap compatible CLI version spec
             case /<intelxdk:cordova-cli.*>/.test(line):
-                if( line.search(/version=\"6\.2\.0\"/) != -1 )
+                if( line.search(/version=\"6\.5\.0\"/) != -1 )
+                    line = '<preference name="phonegap-version" value="cli-6.5.0" />' + ' <!-- ' + line + ' --> ' ;
+                else if( line.search(/version=\"6\.2\.0\"/) != -1 )
                     line = '<preference name="phonegap-version" value="cli-6.2.0" />' + ' <!-- ' + line + ' --> ' ;
                 else if( line.search(/version=\"5\.4\.1\"/) != -1 )
                     line = '<preference name="phonegap-version" value="cli-6.0.0" />' + ' <!-- ' + line + ' --> ' ;
@@ -386,6 +388,7 @@ function tagConvert(line) {
                 break ;
 
             // Android only, convert Crosswalk version specifier
+            // to the equivalent Crosswalk plugin and version number
             case /<intelxdk:crosswalk\s+version.*>/.test(line):
                 x = line.match(/version=\"([0-9]+|shared)\"/)[1] ;
                 if( x === "shared") {
@@ -408,6 +411,17 @@ function tagConvert(line) {
                         line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.5.0" />' ;
                     else
                         line += '<plugin name="cordova-plugin-crosswalk-webview" version="1.4.0" />' ;
+                }
+                break ;
+
+            // Android only, to insure proper Crosswalk 23 builds
+            // minSdkVersion must be set to at least API 16 (Android 4.1)
+            // means no specifying Android 4.0 devices...
+            case /<preference\s+name=\"android-minSdkVersion\".*>/.test(line):
+                x = line.match(/value=\"([0-9]+)\"/)[1] ;
+                if( x <= 15) {
+                    line = "<!-- " + line + " --> " ;
+                    line += '<preference name="android-minSdkVersion" value="16" /> ' ;
                 }
                 break ;
 
