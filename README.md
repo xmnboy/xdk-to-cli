@@ -86,6 +86,8 @@ Running the Script
 * Open the Intel XDK to your "project of interest."
 
 * Using the Test tab in your open project, push the green "PUSH FILES" button.
+  Alternatively, using the Projects tab, switch to a different project and then
+  switch back to your "project of interest."
 
   _This insures that the project files to be read by this script are accurate
   and up-to-date. This "refresh" should be done whenever you have changed any
